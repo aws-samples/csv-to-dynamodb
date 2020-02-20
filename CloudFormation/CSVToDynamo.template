@@ -147,6 +147,7 @@
                 },
                 "Runtime": "python3.6",
                 "Timeout": 900,
+                "MemorySize": 3008,
                 "Environment" : {
                     "Variables" : {"bucket" : { "Ref" : "BucketName" }, "key" : { "Ref" : "FileName" },"table" : { "Ref" : "DynamoDBTableName" }}
                 }
