@@ -145,7 +145,7 @@
                         ]
                     }
                 },
-                "Runtime": "python3.6",
+                "Runtime": "python3.7",
                 "Timeout": 900,
                 "MemorySize": 3008,
                 "Environment" : {
