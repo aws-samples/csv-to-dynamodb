@@ -12,15 +12,15 @@
         "FileName": {
             "Description": "Name of the S3 file (including suffix)",
             "Type": "String",
-            "ConstraintDescription": "Valid S3 file name."
+            "ConstraintDescription": "Valid S3 file name."      
         },
         "DynamoDBTableName": {
             "Description": "Name of the dynamoDB table you will use",
             "Type": "String",
             "ConstraintDescription": "must be a valid dynamoDB name."
         }
-    },
-    "Resources": {
+    },            
+    "Resources": {        
         "DynamoDBTable":{
             "Type": "AWS::DynamoDB::Table",
             "Properties":{
@@ -40,11 +40,11 @@
                 ],
                 "Tags":[
                     {
-                        "Key": "Name",
+                        "Key": "Name",               
                         "Value": {"Ref" : "DynamoDBTableName"}
                     }
                 ]
-            }
+            }    
         },
         "LambdaRole" : {
           "Type" : "AWS::IAM::Role",
@@ -60,24 +60,11 @@
                   "Action" : [
                     "sts:AssumeRole"
                   ]
-                }
+                }                
               ]
             },
             "Path" : "/",
-            "ManagedPolicyArns":["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole","arn:aws:iam::aws:policy/AWSLambdaInvocation-DynamoDB","arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"],
-            "Policies": [{
-					         "PolicyName": "policyname",
-					         "PolicyDocument": {
-						               "Version": "2012-10-17",
-						               "Statement": [{
-                                    "Effect": "Allow",
-  							                    "Resource": "*",
-							                      "Action": [
-								                              "dynamodb:PutItem"
-							                      ]
-						              }]
-					         }
-				    }]
+            "ManagedPolicyArns":["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole","arn:aws:iam::aws:policy/AWSLambdaInvocation-DynamoDB","arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess","arn:aws:iam::aws:policy/AmazonS3FullAccess"]
           }
        },
         "CsvToDDBLambdaFunction": {
@@ -102,19 +89,19 @@
                                 "",
                                 "s3 = boto3.client('s3')",
                                 "dynamodb = boto3.resource('dynamodb')",
-                                "",
+                                "",    
                                 "bucket = os.environ['bucket']",
                                 "key = os.environ['key']",
                                 "tableName = os.environ['table']",
                                 "",
                                 "def lambda_handler(event, context):",
-                                "",
+                                "",    
                                 "   obj = s3.get_object(Bucket=bucket, Key=key)",
                                 "   rows = obj['Body'].read().decode('utf-8').split('\\n')",
                                 "   headers = rows[0].split(',')",
                                 "   rows.pop(0)",
                                 "   table = dynamodb.Table(tableName)",
-                                "",
+                                "",    
                                 "   row_data = []",
                                 "   entry = {}",
                                 "   count = 0",
@@ -141,17 +128,17 @@
                 "Runtime": "python3.6",
                 "Timeout": 900,
                 "Environment" : {
-                    "Variables" : {"bucket" : { "Ref" : "BucketName" }, "key" : { "Ref" : "FileName" },"table" : { "Ref" : "DynamoDBTableName" }}
+                    "Variables" : {"bucket" : "{{resolve:secretsmanager:NirTest:SecretString:S3BucketName}}", "key" : { "Ref" : "FileName" },"table" : { "Ref" : "DynamoDBTableName" }}
                 }
             }
         },
-
+        
         "S3Bucket": {
             "DependsOn" : ["CsvToDDBLambdaFunction","BucketPermission"],
             "Type": "AWS::S3::Bucket",
             "Properties": {
-
-                "BucketName": {"Ref" : "BucketName"},
+                
+                "BucketName": "{{resolve:secretsmanager:NirTest:SecretString:S3BucketName}}",
                 "AccessControl": "BucketOwnerFullControl",
                 "NotificationConfiguration":{
                     "LambdaConfigurations":[
@@ -163,7 +150,7 @@
                                     "Arn"
                                 ]
                             }
-                        }
+                        }         
                     ]
                 }
             }
@@ -174,11 +161,11 @@
                 "Action": "lambda:InvokeFunction",
                 "FunctionName":{"Ref" : "CsvToDDBLambdaFunction"},
                 "Principal": "s3.amazonaws.com",
-                "SourceAccount": {"Ref":"AWS::AccountId"}
-            }
-        }
+                "SourceAccount": {"Ref":"AWS::AccountId"}   
+            }            
+        }          
     },
     "Outputs" : {
-
+        
     }
 }
