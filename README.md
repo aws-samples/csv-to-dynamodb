@@ -1,11 +1,7 @@
-## My Project
+## Implementing bulk CSV ingestion to Amazon DynamoDB
 
-TODO: Fill this README out!
+This repository is used in conjunction with the following blog post: 
 
-Be sure to:
-
-* Change the title in this README
-* Edit your repository description on GitHub
 
 ## License
 
