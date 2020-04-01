@@ -2,6 +2,8 @@
 
 This repository is used in conjunction with the following blog post: 
 
+https://aws.amazon.com/blogs/database/implementing-bulk-csv-ingestion-to-amazon-dynamodb/
+
 You can use your own CSV file or download the test file we provided in this repo. 
 
 Steps to Download CloudFormation template:
