@@ -1,6 +1,12 @@
 ## Implementing bulk CSV ingestion to Amazon DynamoDB
 
+## Introduction
+
 This repository is used in conjunction with the following blog post: 
+
+https://aws.amazon.com/blogs/database/implementing-bulk-csv-ingestion-to-amazon-dynamodb/
+
+## Getting Started
 
 You can use your own CSV file or download the test file we provided in this repo. 
 
