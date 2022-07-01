@@ -66,19 +66,19 @@
             "Path" : "/",
             "ManagedPolicyArns":["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole","arn:aws:iam::aws:policy/AWSLambdaInvocation-DynamoDB","arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"],
             "Policies": [{
-					         "PolicyName": "policyname",
-					         "PolicyDocument": {
-						               "Version": "2012-10-17",
-						               "Statement": [{
+                        "PolicyName": "policyname",
+                        "PolicyDocument": {
+                                 "Version": "2012-10-17",
+                                 "Statement": [{
                                     "Effect": "Allow",
-  							                    "Resource": "*",
-							                      "Action": [
-								                              "dynamodb:PutItem",
+                                         "Resource": "*",
+                                           "Action": [
+                                                      "dynamodb:PutItem",
                                                               "dynamodb:BatchWriteItem"
-							                      ]
-						              }]
-					         }
-				    }]
+                                           ]
+                                }]
+                        }
+                }]
           }
        },
         "CsvToDDBLambdaFunction": {
@@ -116,11 +116,13 @@
                                 "   #get() does not store in memory",
                                 "   try:",
                                 "       obj = s3.Object(bucket, key).get()['Body']",
-                                "   except:",
+                                "   except Exception as error:",
+                                "       print(error)",
                                 "       print(\"S3 Object could not be opened. Check environment variable. \")",
                                 "   try:",
                                 "       table = dynamodb.Table(tableName)",
-                                "   except:",
+                                "   except Exception as error:",
+                                "       print(error)",
                                 "       print(\"Error loading DynamoDB table. Check if table was created correctly and environment variable.\")",
                                 "",
                                 "   batch_size = 100",
@@ -146,7 +148,8 @@
                                 "def write_to_dynamo(rows):",
                                 "   try:",
                                 "      table = dynamodb.Table(tableName)",
-                                "   except:",
+                                "   except Exception as error:",
+                                "       print(error)",
                                 "      print(\"Error loading DynamoDB table. Check if table was created correctly and environment variable.\")",
                                 "",
                                 "   try:",
@@ -155,7 +158,8 @@
                                 "            batch.put_item(",
                                 "               Item=rows[i]",
                                 "            )",
-                                "   except:",
+                                "   except Exception as error:",
+                                "       print(error)",
                                 "      print(\"Error executing batch_writer\")"
                             ]
                         ]
