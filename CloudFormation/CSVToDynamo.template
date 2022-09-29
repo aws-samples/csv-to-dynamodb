@@ -149,7 +149,7 @@
                                 "   try:",
                                 "      table = dynamodb.Table(tableName)",
                                 "   except Exception as error:",
-                                "       print(error)",
+                                "      print(error)",
                                 "      print(\"Error loading DynamoDB table. Check if table was created correctly and environment variable.\")",
                                 "",
                                 "   try:",
@@ -159,7 +159,7 @@
                                 "               Item=rows[i]",
                                 "            )",
                                 "   except Exception as error:",
-                                "       print(error)",
+                                "      print(error)",
                                 "      print(\"Error executing batch_writer\")"
                             ]
                         ]
